@@ -1,0 +1,61 @@
+<mujoco model="Tracer">
+  <compiler angle="radian"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81">
+    <flag warmstart="enable"/>
+  </option>
+
+  <default>
+    <geom condim="3" friction="1 0.5 0.5"/>
+  </default>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="5 5 0.1" rgba="0.9 0.9 0.9 1"/>
+
+    <!-- base_link at z=0, same as URDF origin. Wheels bottom out at z=0 = ground. -->
+    <body name="base_link" pos="0 0 0">
+      <freejoint name="base_float"/>
+      <inertial pos="0 0 0.0995" mass="10" diaginertia="0.720753 0.426771 0.326184"/>
+
+      <!-- chassis: URDF origin xyz="0 0 0.0995" -->
+      <geom name="chassis" size="0.351 0.305 0.0695" pos="0 0 0.0995" type="box" rgba="0 0 0.8 1"/>
+
+      <!-- casters: URDF joint origins exactly -->
+      <geom name="fr_caster" size="0.025 0.015" pos="0.25 -0.22 0.025" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="0.1 0.005 0.001"/>
+      <geom name="br_caster" size="0.025 0.015" pos="-0.25 -0.22 0.025" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="0.1 0.005 0.001"/>
+      <geom name="fl_caster" size="0.025 0.015" pos="0.25 0.22 0.025" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="0.1 0.005 0.001"/>
+      <geom name="bl_caster" size="0.025 0.015" pos="-0.25 0.22 0.025" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="0.1 0.005 0.001"/>
+
+      <!-- battery: URDF joint origin xyz="0.133 0 0.308954" -->
+      <geom name="battery" size="0.102489 0.18796 0.139954" pos="0.133 0 0.308954" type="box" rgba="0 0 0.8 1"/>
+
+      <!-- lidar: battery origin + lidar joint origin = 0.133 0 0.478708 -->
+      <geom name="lidar" size="0.0225 0.0298" pos="0.133 0 0.478708" type="cylinder" rgba="0 0 0.8 1"/>
+
+      <!-- right wheel: URDF joint origin xyz="0 -0.22 0.05" -->
+      <body name="right_wheel" pos="0 -0.22 0.05">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.5" diaginertia="0.000625 0.000379 0.000379"/>
+        <joint name="base_to_right_wheel" pos="0 0 0" axis="0 1 0" damping="0.1"/>
+        <geom name="right_wheel_geom" size="0.05 0.02" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="1.5 0.5 0.5"/>
+      </body>
+
+      <!-- left wheel: URDF joint origin xyz="0 0.22 0.05" -->
+      <body name="left_wheel" pos="0 0.22 0.05">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.5" diaginertia="0.000625 0.000379 0.000379"/>
+        <joint name="base_to_left_wheel" pos="0 0 0" axis="0 1 0" damping="0.1"/>
+        <geom name="left_wheel_geom" size="0.05 0.02" quat="0.500023 -0.499977 0.5 0.5" type="cylinder" rgba="0 0 0.8 1" friction="1.5 0.5 0.5"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- prevent wheels from colliding with the chassis they overlap into -->
+  <contact>
+    <exclude body1="base_link" body2="right_wheel"/>
+    <exclude body1="base_link" body2="left_wheel"/>
+  </contact>
+
+  <actuator>
+    <motor name="left_motor" joint="base_to_left_wheel" gear="10" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="right_motor" joint="base_to_right_wheel" gear="10" ctrllimited="true" ctrlrange="-1 1"/>
+  </actuator>
+</mujoco>
