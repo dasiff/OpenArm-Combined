@@ -22,6 +22,7 @@
 - Another thing to note is that our urdf model only has two main components: links and joints.
     - Joints define what can move. 
     - Actuators define how we can command that motion.
+
         - To actually controll things like wheels of our tracer, we need to convert the mujoco to mjcf and add actuators. 
 
 ### Tracer.xml (MJCF)
@@ -114,4 +115,4 @@ python -m mujoco.viewer --mjcf tracer_openarm_combined.xml
 
 #### NOTE:
 - `tracer_openarm_combined.xml` is AI-generated code only for testing. Will rewrite our own later.
-- Do NOT delete the `meshes/` directory — the combined model needs its mesh files.
+- Do NOT delete the `meshes/` directory — the combined model needs its mesh files for referencing.
