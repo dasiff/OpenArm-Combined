@@ -1,6 +1,6 @@
 <!-- AI-generated code only for testing.  -->
 <mujoco model="Tracer_OpenArm_Combined">
-  <compiler angle="radian" meshdir="meshes"/>
+  <compiler angle="radian" meshdir="assets/openarm"/>
 
   <option timestep="0.002" gravity="0 0 -9.81">
     <flag warmstart="enable"/>

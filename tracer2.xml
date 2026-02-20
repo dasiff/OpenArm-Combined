@@ -1,0 +1,95 @@
+<mujoco model="tracer2">
+  <compiler angle="radian" meshdir="assets/tracer2/meshes"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81">
+    <flag warmstart="enable"/>
+  </option>
+
+  <default>
+    <geom condim="3" friction="1 0.5 0.5"/>
+  </default>
+
+  <asset>
+    <mesh name="base_link"        file="base_link.STL"/>
+    <mesh name="right_link"       file="right_link.STL"/>
+    <mesh name="left_Link"        file="left_Link.STL"/>
+    <mesh name="right_front_link" file="right_front_link.STL"/>
+    <mesh name="right_rear_link"  file="right_rear_link.STL"/>
+    <mesh name="left_front_link"  file="left_front_link.STL"/>
+    <mesh name="left_rear_link"   file="left_rear_link.STL"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="5 5 0.1" rgba="0.9 0.9 0.9 1"/>
+
+    <!-- base_link z=0.22 places drive wheels (~radius 0.13m) near the ground -->
+    <body name="base_link" pos="0 0 0.22">
+      <freejoint name="base_float"/>
+      <inertial pos="-0.037979 -0.003145 -0.025920"
+                mass="2.4240"
+                diaginertia="0.069154 0.058886 0.125132"/>
+      <geom name="base_link_geom" type="mesh" mesh="base_link" rgba="0.2 0.2 0.2 1"/>
+
+      <!-- Right drive wheel: joint rpy=(-pi/2,0,0) -> quat=(0.7071,-0.7071,0,0) -->
+      <!-- Wheel axis (0,0,1) in child frame = Y-axis in base_link frame -->
+      <body name="right_link" pos="-0.018818 -0.2537 -0.0905" quat="0.7071 -0.7071 0 0">
+        <joint name="right_joint" type="hinge" axis="0 0 1" damping="0.1"/>
+        <inertial pos="0 0 -0.005" mass="0.14836" diaginertia="0.00013099 0.00013099 0.00023781"/>
+        <geom name="right_link_geom" type="mesh" mesh="right_link"
+              rgba="0.15 0.15 0.15 1" friction="1.5 0.5 0.5"/>
+      </body>
+
+      <!-- Left drive wheel: joint rpy=(+pi/2,0,0) -> quat=(0.7071,0.7071,0,0) -->
+      <body name="left_Link" pos="-0.018818 0.2537 -0.0905" quat="0.7071 0.7071 0 0">
+        <joint name="left_joint" type="hinge" axis="0 0 1" damping="0.1"/>
+        <inertial pos="0 0 -0.005" mass="0.14836" diaginertia="0.00013099 0.00013099 0.00023781"/>
+        <geom name="left_Link_geom" type="mesh" mesh="left_Link"
+              rgba="0.15 0.15 0.15 1" friction="1.5 0.5 0.5"/>
+      </body>
+
+      <!-- Right front suspension: fixed, rpy=(pi,0,0) -> quat=(0,1,0,0) -->
+      <body name="right_front_link" pos="0.23918 -0.1977 -0.058" quat="0 1 0 0">
+        <inertial pos="-0.013166 0.000027 0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="right_front_link_geom" type="mesh" mesh="right_front_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Right rear suspension: fixed, rpy=(pi,0,0) -> quat=(0,1,0,0) -->
+      <body name="right_rear_link" pos="-0.27082 -0.183 -0.058" quat="0 1 0 0">
+        <inertial pos="-0.013166 0.000027 0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="right_rear_link_geom" type="mesh" mesh="right_rear_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Left front suspension: fixed, rpy=(0,0,0) -> quat=(1,0,0,0) -->
+      <body name="left_front_link" pos="0.23918 0.1977 -0.058" quat="1 0 0 0">
+        <inertial pos="-0.013166 -0.000027 -0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="left_front_link_geom" type="mesh" mesh="left_front_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Left rear suspension: fixed, rpy=(0,0,0) -> quat=(1,0,0,0) -->
+      <!-- Original URDF has mass=0; using tiny nonzero mass to avoid singular inertia -->
+      <body name="left_rear_link" pos="-0.27077 0.18305 -0.058" quat="1 0 0 0">
+        <inertial pos="0 0 0" mass="0.001" diaginertia="1e-6 1e-6 1e-6"/>
+        <geom name="left_rear_link_geom" type="mesh" mesh="left_rear_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <!-- Prevent mesh overlap contacts between chassis and attached bodies -->
+  <contact>
+    <exclude body1="base_link" body2="right_link"/>
+    <exclude body1="base_link" body2="left_Link"/>
+    <exclude body1="base_link" body2="right_front_link"/>
+    <exclude body1="base_link" body2="right_rear_link"/>
+    <exclude body1="base_link" body2="left_front_link"/>
+    <exclude body1="base_link" body2="left_rear_link"/>
+  </contact>
+
+  <actuator>
+    <motor name="left_motor"  joint="left_joint"  gear="10" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="right_motor" joint="right_joint" gear="10" ctrllimited="true" ctrlrange="-1 1"/>
+  </actuator>
+</mujoco>

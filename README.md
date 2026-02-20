@@ -1,5 +1,37 @@
 # OpenArm Combined
 
+## Repository Structure
+
+```
+OpenArm-Combined/
+├── assets/
+│   ├── openarm/                  # OpenArm bimanual arm meshes
+│   │   ├── collision/
+│   │   │   ├── arm/              # link0–link7 collision STLs
+│   │   │   ├── body/             # body_link0 collision STL
+│   │   │   └── gripper/          # finger, hand collision STLs
+│   │   └── visual/
+│   │       ├── arm/              # link0–link7 visual OBJs
+│   │       ├── body/             # body_link0 visual OBJs
+│   │       └── gripper/          # finger, hand visual OBJs
+│   ├── tracer/                   # Original Tracer assets
+│   │   └── tracer.urdf
+│   └── tracer2/                  # Tracer2 assets
+│       ├── meshes/               # base_link, wheels, suspension STLs
+│       └── urdf/
+│           └── tracer2_description.urdf
+├── scripts/
+│   └── saveAsXML.py              # Converts tracer.urdf → tracer.xml (MJCF)
+├── old_tracer.xml                # Tracer MJCF (primitive shapes)
+├── old_tracer_openarm_combined.xml  # Tracer + OpenArm combined MJCF
+├── tracer2.xml                   # Tracer2 MJCF (mesh-based)
+├── view_urdf.py                  # Viewer: loads assets/tracer/tracer.urdf
+├── view_xml.py                   # Viewer: loads any XML (default: tracer2.xml)
+└── README.md
+```
+
+
+
 ### Tracer.urdf
 - The original `tracer.urdf` file only had a <visual> tag. 
 - Added `<inertial>` and `<collision>` tags that include data for every link in tracer.urdf so Mujoco has valid masses/inertias and can simulate contacts.
@@ -102,16 +134,13 @@ pip install mujoco
 python view_urdf.py
 ```
 
-3. View the Tracer MJCF (tracer only):
+3. View the Tracer2 MJCF:
 ```
 python view_xml.py
 ```
 
-4. View the combined model (Tracer + OpenArm bimanual):
+4. View any other XML model:
 ```
-python -m mujoco.viewer --mjcf tracer_openarm_combined.xml
+python view_xml.py old_tracer.xml
+python view_xml.py old_tracer_openarm_combined.xml
 ```
-
-#### NOTE:
-- `tracer_openarm_combined.xml` is AI-generated code only for testing. Will rewrite our own later.
-- Do NOT delete the `meshes/` directory — the combined model needs its mesh files.

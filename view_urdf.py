@@ -1,7 +1,7 @@
 import mujoco
 import mujoco.viewer
 
-model = mujoco.MjModel.from_xml_path("tracer.urdf")
+model = mujoco.MjModel.from_xml_path("assets/tracer/tracer.urdf")
 data = mujoco.MjData(model)
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
