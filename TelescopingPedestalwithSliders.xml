@@ -1,0 +1,26 @@
+<mujoco model="TelescopingPedestalwithSliders">
+    <compiler angle="radian" eulerseq="XYZ" />
+    <asset>
+        <mesh name="Bottom" file="meshes/Bottom.stl" scale="0.001 0.001 0.001" />
+        <mesh name="Middle" file="meshes/Middle.stl" scale="0.001 0.001 0.001" />
+        <mesh name="Top" file="meshes/Top.stl" scale="0.001 0.001 0.001" />
+    </asset>
+    <worldbody>
+        <light directional="true" pos="-0.5 0.5 3" dir="0 0 -1" />
+        <geom pos="0 0 0" size="1 1 1" type="plane" rgba="1 0.83 0.61 0.5" />
+        <body name="Bottom" pos="0.0 0.0 0.0" euler="0.0 -0.0 0.0">
+            <geom name="Bottom_geom" type="mesh" mesh="Bottom" pos="0 0 0" euler="0 0 0" />
+            <inertial mass="16.186799218129053" pos="-6.174998922140081e-17 -4.410713515814344e-17 0.1499646530197762" fullinertia="0.1715811308686268 0.1715811308686267 0.10047406229545162 -1.0280928108841175e-16 -5.850884342065369e-17 -1.568173740499727e-17" />
+            <body name="Middle" pos="-1.83697019872103e-17 0.0 -6.93889390390734e-20" euler="0.0 6.123233995736766e-17 0.0">
+                <joint name="MiddleBottom" type="slide" axis="-6.123233995736766e-17 0.0 1.0" pos="3.0814879110195774e-33 0.0 0.3" range="-0.25 0" limited="true" damping="800" />
+                <geom name="Middle_geom" type="mesh" mesh="Middle" pos="0 0 0" euler="0 0 0" />
+                <inertial mass="11.03591056789599" pos="5.2868658133146065e-18 2.587746018778638e-17 0.424964427064295" fullinertia="0.0802129139330039 0.0802129139330039 0.045533415564639176 5.1404640544205905e-17 -5.1428073216496833e-17 -1.571713246613522e-17" />
+                <body name="Top" pos="-3.367778697655221e-17 7.888609052210118e-33 -7.095019016745142e-17" euler="1.715310437484733e-32 6.123233995736766e-17 -1.1479225108292335e-48">
+                    <joint name="TopMiddle" type="slide" axis="-1.2246467991473532e-16 1.715310437484733e-32 1.0" pos="-1.530808498934193e-17 1.5455983539559162e-33 0.5500000000000002" range="-0.25 0" limited="true" damping="50000" />
+                    <geom name="Top_geom" type="mesh" mesh="Top" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="19.011718749999993" pos="-2.3105504054365442e-17 7.510665924318382e-18 0.675" fullinertia="0.11407989501953075 0.11407989501953075 0.03012105305989579 1.7134880181401973e-17 1.5279666092840786e-17 -4.069534043082967e-17" />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+</mujoco>
