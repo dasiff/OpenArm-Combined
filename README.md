@@ -5,28 +5,34 @@
 ```
 OpenArm-Combined/
 ├── assets/
-│   ├── openarm/                  # OpenArm bimanual arm meshes
+│   ├── openarm/                          # OpenArm bimanual arm meshes
 │   │   ├── collision/
-│   │   │   ├── arm/              # link0–link7 collision STLs
-│   │   │   ├── body/             # body_link0 collision STL
-│   │   │   └── gripper/          # finger, hand collision STLs
+│   │   │   ├── arm/                      # link0–link7 collision STLs
+│   │   │   ├── body/                     # body_link0 collision STL
+│   │   │   └── gripper/                  # finger, hand collision STLs
 │   │   └── visual/
-│   │       ├── arm/              # link0–link7 visual OBJs
-│   │       ├── body/             # body_link0 visual OBJs
-│   │       └── gripper/          # finger, hand visual OBJs
-│   ├── tracer/                   # Original Tracer assets
+│   │       ├── arm/                      # link0–link7 visual OBJs
+│   │       ├── body/                     # body_link0 visual OBJs
+│   │       └── gripper/                  # finger, hand visual OBJs
+│   ├── tracer/                           # Original Tracer assets
 │   │   └── tracer.urdf
-│   └── tracer2/                  # Tracer2 assets
-│       ├── meshes/               # base_link, wheels, suspension STLs
-│       └── urdf/
-│           └── tracer2_description.urdf
+│   ├── tracer2/                          # Tracer2 assets
+│   │   ├── meshes/                       # base_link, wheels, suspension STLs
+│   │   └── urdf/
+│   │       └── tracer2_description.urdf
+│   └── pedestal/                         # Telescoping_Pedestal assets
+│       ├── Bottom.stl                    # prismatic joint with middle
+│       ├── Middle.stl                    # prismatic joint with top
+│       └── Top.stl
+├── legacy
+│   ├── old_tracer.xml                    # Tracer MJCF (primitive shapes)
+│   └── old_tracer_openarm_combined.xml   # Tracer + OpenArm combined MJCF
 ├── scripts/
-│   └── saveAsXML.py              # Converts tracer.urdf → tracer.xml (MJCF)
-├── old_tracer.xml                # Tracer MJCF (primitive shapes)
-├── old_tracer_openarm_combined.xml  # Tracer + OpenArm combined MJCF
-├── tracer2.xml                   # Tracer2 MJCF (mesh-based)
-├── view_urdf.py                  # Viewer: loads assets/tracer/tracer.urdf
-├── view_xml.py                   # Viewer: loads any XML (default: tracer2.xml)
+│   └── saveAsXML.py                      # Converts tracer.urdf → tracer.xml (MJCF)
+├── Tracer.xml                            # Tracer2 MJCF (mesh-based)
+├── Telescoping_Pedestal.xml              # Telescoping pedestal (estimated)
+├── view_urdf.py                          # Viewer: loads assets/tracer/tracer.urdf
+├── view_xml.py                           # Viewer: loads any XML (default: tracer2.xml)
 └── README.md
 ```
 
