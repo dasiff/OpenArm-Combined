@@ -1,4 +1,4 @@
-<mujoco model="TelescopingPedestalwithSliders">
+<mujoco model="Telescoping_Pedestal">
     <compiler angle="radian" eulerseq="XYZ" />
     <asset>
         <mesh name="Bottom" file="assets/pedestal/Bottom.stl" scale="0.001 0.001 0.001" />

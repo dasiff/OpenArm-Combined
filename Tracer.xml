@@ -1,4 +1,4 @@
-<mujoco model="tracer2">
+<mujoco model="Tracer">
   <compiler angle="radian" meshdir="assets/tracer2/meshes"/>
 
   <option timestep="0.002" gravity="0 0 -9.81">
