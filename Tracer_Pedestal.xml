@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="Tracer_Pedestal">
+
+  <!-- No meshdir: all mesh paths are relative to this XML file's directory -->
+  <compiler angle="radian"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81">
+    <flag warmstart="enable"/>
+  </option>
+
+  <default>
+    <geom condim="3" friction="1 0.5 0.5"/>
+  </default>
+
+  <asset>
+    <!-- Wood-colored material for the robot mounting plate -->
+    <material name="wood_brown" rgba="0.72 0.52 0.30 1.0" reflectance="0.05" shininess="0.1"/>
+
+    <!-- Tracer meshes -->
+    <mesh name="base_link"        file="assets/tracer2/meshes/base_link.STL"/>
+    <mesh name="right_link"       file="assets/tracer2/meshes/right_link.STL"/>
+    <mesh name="left_Link"        file="assets/tracer2/meshes/left_Link.STL"/>
+    <mesh name="right_front_link" file="assets/tracer2/meshes/right_front_link.STL"/>
+    <mesh name="right_rear_link"  file="assets/tracer2/meshes/right_rear_link.STL"/>
+    <mesh name="left_front_link"  file="assets/tracer2/meshes/left_front_link.STL"/>
+    <mesh name="left_rear_link"   file="assets/tracer2/meshes/left_rear_link.STL"/>
+
+    <!-- Pedestal meshes -->
+    <mesh name="pedestal_Bottom" file="assets/pedestal/Bottom.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="pedestal_Middle" file="assets/pedestal/Middle.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="pedestal_Top"    file="assets/pedestal/Top.stl"    scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="5 5 0.1" rgba="0.9 0.9 0.9 1"/>
+
+    <!-- Tracer mobile base: freejoint allows the whole assembly to drive around -->
+    <body name="base_link" pos="0 0 0.22">
+      <freejoint name="base_float"/>
+      <inertial pos="-0.037979 -0.003145 -0.025920"
+                mass="2.4240"
+                diaginertia="0.069154 0.058886 0.125132"/>
+      <geom name="base_link_geom" type="mesh" mesh="base_link" rgba="0.2 0.2 0.2 1"/>
+
+      <!-- Right drive wheel -->
+      <body name="right_link" pos="-0.018818 -0.2537 -0.0905" quat="0.7071 -0.7071 0 0">
+        <joint name="right_joint" type="hinge" axis="0 0 1" damping="0.1"/>
+        <inertial pos="0 0 -0.005" mass="0.14836" diaginertia="0.00013099 0.00013099 0.00023781"/>
+        <geom name="right_link_geom" type="mesh" mesh="right_link"
+              rgba="0.15 0.15 0.15 1" friction="1.5 0.5 0.5"/>
+      </body>
+
+      <!-- Left drive wheel -->
+      <body name="left_Link" pos="-0.018818 0.2537 -0.0905" quat="0.7071 0.7071 0 0">
+        <joint name="left_joint" type="hinge" axis="0 0 1" damping="0.1"/>
+        <inertial pos="0 0 -0.005" mass="0.14836" diaginertia="0.00013099 0.00013099 0.00023781"/>
+        <geom name="left_Link_geom" type="mesh" mesh="left_Link"
+              rgba="0.15 0.15 0.15 1" friction="1.5 0.5 0.5"/>
+      </body>
+
+      <!-- Right front suspension (fixed) -->
+      <body name="right_front_link" pos="0.23918 -0.1977 -0.058" quat="0 1 0 0">
+        <inertial pos="-0.013166 0.000027 0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="right_front_link_geom" type="mesh" mesh="right_front_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Right rear suspension (fixed) -->
+      <body name="right_rear_link" pos="-0.27082 -0.183 -0.058" quat="0 1 0 0">
+        <inertial pos="-0.013166 0.000027 0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="right_rear_link_geom" type="mesh" mesh="right_rear_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Left front suspension (fixed) -->
+      <body name="left_front_link" pos="0.23918 0.1977 -0.058" quat="1 0 0 0">
+        <inertial pos="-0.013166 -0.000027 -0.04181"
+                  mass="0.2864" diaginertia="0.00029479 0.00032696 0.00020885"/>
+        <geom name="left_front_link_geom" type="mesh" mesh="left_front_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- Left rear suspension (fixed) -->
+      <body name="left_rear_link" pos="-0.27077 0.18305 -0.058" quat="1 0 0 0">
+        <inertial pos="0 0 0" mass="0.001" diaginertia="1e-6 1e-6 1e-6"/>
+        <geom name="left_rear_link_geom" type="mesh" mesh="left_rear_link" rgba="0.5 0.5 0.6 1"/>
+      </body>
+
+      <!-- ============================================================
+           Telescoping Pedestal — rigidly attached to Tracer base_link
+           pos="0 0 0" places pedestal Bottom at the base_link origin.
+           Adjust z here to raise/lower the pedestal on the chassis.
+           ============================================================ -->
+      <body name="pedestal_Bottom" pos="0.0 0.0 0.0" euler="0.0 0.0 0.0">
+        <inertial mass="16.186799218129053"
+                  pos="-6.174998922140081e-17 -4.410713515814344e-17 0.1499646530197762"
+                  fullinertia="0.1715811308686268 0.1715811308686267 0.10047406229545162
+                               -1.0280928108841175e-16 -5.850884342065369e-17 -1.568173740499727e-17"/>
+        <geom name="pedestal_Bottom_geom" type="mesh" mesh="pedestal_Bottom" pos="0 0 0" euler="0 0 0"/>
+
+        <!-- pedestal_Middle: rigidly fixed (no joint) -->
+        <body name="pedestal_Middle" pos="0.0 0.0 0.0">
+          <inertial mass="11.03591056789599"
+                    pos="0.0 0.0 0.424964427064295"
+                    fullinertia="0.0802129139330039 0.0802129139330039 0.045533415564639176
+                                 0.0 0.0 0.0"/>
+          <geom name="pedestal_Middle_geom" type="mesh" mesh="pedestal_Middle" pos="0 0 0" euler="0 0 0"/>
+
+          <!-- pedestal_Top: rigidly fixed (no joint) -->
+          <body name="pedestal_Top" pos="0.0 0.0 0.0">
+            <inertial mass="19.011718749999993"
+                      pos="0.0 0.0 0.675"
+                      fullinertia="0.11407989501953075 0.11407989501953075 0.03012105305989579
+                                   0.0 0.0 0.0"/>
+            <geom name="pedestal_Top_geom" type="mesh" mesh="pedestal_Top" pos="0 0 0" euler="0 0 0"/>
+
+            <!-- Mounting plate: matches OpenArm body_link0 base footprint (~0.3m x 0.3m).
+                 pos z=0.82 places it flush on top of the pedestal Top section.
+                 Adjust z if it floats or clips after viewing. -->
+            <body name="robot_mount_plate" pos="0.0 0.0 0.82">
+              <inertial mass="1.0" pos="0 0 0" diaginertia="0.01 0.01 0.01"/>
+              <geom name="mount_plate_geom" type="box" size="0.15 0.15 0.02"
+                    material="wood_brown" contype="0" conaffinity="0"/>
+            </body>
+          </body>
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <!-- Contact exclusions -->
+  <contact>
+    <!-- Tracer chassis vs wheels/suspension -->
+    <exclude body1="base_link" body2="right_link"/>
+    <exclude body1="base_link" body2="left_Link"/>
+    <exclude body1="base_link" body2="right_front_link"/>
+    <exclude body1="base_link" body2="right_rear_link"/>
+    <exclude body1="base_link" body2="left_front_link"/>
+    <exclude body1="base_link" body2="left_rear_link"/>
+    <!-- Tracer chassis vs pedestal (rigidly attached, no collision needed) -->
+    <exclude body1="base_link" body2="pedestal_Bottom"/>
+    <exclude body1="base_link" body2="pedestal_Middle"/>
+    <exclude body1="base_link" body2="pedestal_Top"/>
+    <!-- Pedestal internal contacts -->
+    <exclude body1="pedestal_Bottom" body2="pedestal_Middle"/>
+    <exclude body1="pedestal_Middle" body2="pedestal_Top"/>
+    <exclude body1="pedestal_Top" body2="robot_mount_plate"/>
+  </contact>
+
+  <actuator>
+    <!-- Tracer drive motors -->
+    <!-- Differential drive: right wheel is mirrored, so gear is negated so that
+         ctrl=+1 +1 = forward, ctrl=-1 -1 = backward, ctrl=+1 -1 = turn right -->
+    <motor name="left_motor"  joint="left_joint"  gear="10"  ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="right_motor" joint="right_joint" gear="-10" ctrllimited="true" ctrlrange="-1 1"/>
+    <!-- Pedestal joints locked at range="0 0"; no actuators needed -->
+  </actuator>
+
+</mujoco>
