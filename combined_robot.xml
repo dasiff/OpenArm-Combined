@@ -183,9 +183,9 @@
 
       <!-- ================================================
            LAYER 2: TELESCOPING PEDESTAL
-           Welded to Tracer top deck at local z=+0.16
+           Welded to Tracer top deck at local z=+0.0
       ================================================ -->
-      <body name="pedestal_Bottom" pos="0.0 0.0 0.16">
+      <body name="pedestal_Bottom" pos="0.0 0.0 0.0">
         <inertial mass="16.1868" pos="0 0 0.14996"
                   fullinertia="0.17158 0.17158 0.10047 0 0 0" />
         <geom name="pedestal_Bottom_geom" type="mesh" mesh="pedestal_Bottom" />
